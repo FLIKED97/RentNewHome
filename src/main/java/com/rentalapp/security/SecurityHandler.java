@@ -23,14 +23,14 @@ public class SecurityHandler implements AuthenticationSuccessHandler {
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         String username = authentication.getName();
-        String redirectUrl = "/main"; // Default redirect
+        String redirectUrl = "/home"; // Default redirect
 
         // Визначаємо куди перенаправляти в залежності від ролі
         if (roles.contains("ROLE_ADMIN")) {
             redirectUrl = "/main";
             log.info("Admin {} successfully logged in", username);
         } else if (roles.contains("ROLE_USER")) {
-            redirectUrl = "/main";
+            redirectUrl = "/home";
             log.info("User {} successfully logged in", username);
         }
 

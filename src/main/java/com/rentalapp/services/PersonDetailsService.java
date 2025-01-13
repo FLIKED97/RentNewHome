@@ -1,7 +1,7 @@
 package com.rentalapp.services;
 
 import com.rentalapp.models.User;
-import com.rentalapp.repositories.PersonRepository;
+import com.rentalapp.repositories.UserRepository;
 import com.rentalapp.security.PersonDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PersonDetailsService implements UserDetailsService {
-    private final PersonRepository personRepository;
+    private final UserRepository personRepository;
 
 
     @Override

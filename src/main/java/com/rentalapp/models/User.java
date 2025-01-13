@@ -10,10 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
+@Data
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,22 +37,15 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	@Column(name="Role", insertable=false, updatable=false)
 	private UserRole role;
-	
+
 	@Column(name="Rating", insertable=false, updatable=false)
 	private float rating;
 
-	public User() {
-
+	public User(Long userId, String firstName, String lastName, String email, String password, UserRole role, float rating) {
 	}
 
-	public User(Long id, String firstName, String lastName, String email, String password, UserRole role, float rating) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.role = role;
-		this.rating = rating;
+	public User() {
+
 	}
 
 	public Long getId() {

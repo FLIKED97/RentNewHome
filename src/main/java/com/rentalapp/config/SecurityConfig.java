@@ -47,26 +47,43 @@ public class SecurityConfig {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        // Публічні маршрути (доступні всім, включаючи незареєстрованих користувачів)
+                        // Публічні маршрути
                         .requestMatchers(
                                 "/auth/registration",
                                 "/auth/**",
-                                "/search/**",          // Пошук доступний всім
-                                "/main/**",            // Головна сторінка доступна всім
-                                "/comment/view/**",     // Перегляд коментарів доступний всім
-                                "*/error/**"
+                                "/search/**",
+                                "/properties/view/**",    // Перегляд оголошень доступний всім
+                                "/home/**"
                         ).permitAll()
+
+                        // Маршрути для Landlord
+                        .requestMatchers(
+                                "/landlord/**",
+                                "/properties/create/**",
+                                "/properties/edit/**",
+                                "/properties/delete/**"
+                        ).hasRole("LANDLORD")
+
+                        // Маршрути для Tenant
+                        .requestMatchers(
+                                "/tenant/**",
+                                "/bookings/**",
+                                "/reviews/**"
+                        ).hasRole("TENANT")
 
                         // Маршрути для Admin
                         .requestMatchers(
                                 "/admin/**",
-                                "/announcements/**"    // Додано доступ до оголошень для адміна
+                                "/management/**",
+                                "/users/**"
                         ).hasRole("ADMIN")
 
-                        // Маршрути тільки для авторизованих користувачів
+                        // Загальні маршрути для авторизованих користувачів
                         .requestMatchers(
-                                "/user/**"
-                        ).hasAnyRole("USER", "ADMIN")
+                                "/profile/**",
+                                "/messages/**",
+                                "/notifications/**"
+                        ).hasAnyRole("TENANT", "LANDLORD", "ADMIN")
 
                         // Всі інші запити потребують автентифікації
                         .anyRequest().authenticated()
@@ -86,7 +103,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Решта бінів залишається без змін
+    // Базові налаштування залишаються тими самими
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -100,17 +117,12 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
-        return config.getAuthenticationManager();
-    }
 
     @Bean
     public RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.fromHierarchy("""
-            ROLE_ADMIN > ROLE_PUBLISHER
-            ROLE_PUBLISHER > ROLE_USER
+            ROLE_ADMIN > ROLE_LANDLORD
+            ROLE_ADMIN > ROLE_TENANT
             """);
     }
 

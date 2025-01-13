@@ -1,12 +1,13 @@
 package com.rentalapp.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
+@Table(name = "admins")
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Admin extends User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +20,9 @@ public class Admin extends User {
 	@Column(name="Permissions", insertable=false, updatable=false)
 	private String permissions;
 
-	public Admin() {
-		super();
-	}
-
-	public Admin(Long id, String accessLevel, String permissions, Long userId, String firstName, String lastName, String email, String password, float rating) {
-		super(userId, firstName, lastName, email, password, UserRole.ADMIN, rating);
-		this.id = id;
-		this.accessLevel = accessLevel;
-		this.permissions = permissions;
+	@PrePersist
+	public void prePersist() {
+		setRole(UserRole.ADMIN);
 	}
 
 	public Long getId() {
