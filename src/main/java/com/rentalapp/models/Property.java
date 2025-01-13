@@ -1,90 +1,43 @@
 package com.rentalapp.models;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "properties")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Property {
-	private int id;
-	private int landlordId;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "landlord_id", nullable = false)
+	private User landlord;  // Замінено Landlord на User
+
+	@Column(nullable = false, name = "title")
 	private String title;
+
+	@Column(nullable = false, columnDefinition = "TEXT", name = "description")
 	private String description;
+
+	@Column(nullable = false, name = "price")
 	private float price;
+
+	@Column(nullable = false, name = "location")
 	private String location;
+
+	@Column(nullable = false, name = "status")
 	private String status;
-	private List<PropertyImage> images;
-	
-	public Property(int id, int landlordId, String title, String description, float price, String location,
-			String status, List<PropertyImage> images) {
-		this.id = id;
-		this.landlordId = landlordId;
-		this.title = title;
-		this.description = description;
-		this.price = price;
-		this.location = location;
-		this.status = status;
-		this.images = images;
-	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getLandlordId() {
-		return landlordId;
-	}
-
-	public void setLandlordId(int landlordId) {
-		this.landlordId = landlordId;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<PropertyImage> getImages() {
-		return images;
-	}
-
-	public void setImages(List<PropertyImage> images) {
-		this.images = images;
-	}
+	@OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PropertyImage> images = new ArrayList<>();
 }

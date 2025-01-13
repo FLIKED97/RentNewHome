@@ -1,37 +1,25 @@
 package com.rentalapp.models;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "property_images")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PropertyImage {
-	private int id;
-	private int propertyId;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "property_id", nullable = false)
+	private Property property;
+
+	@Column(nullable = false, name = "image_url")
 	private String imageUrl;
-	
-	public PropertyImage(int id, int propertyId, String imageUrl) {
-		this.id = id;
-		this.propertyId = propertyId;
-		this.imageUrl = imageUrl;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
 }
