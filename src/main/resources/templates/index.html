@@ -71,18 +71,18 @@
                 </div>
                 <div class="collapse mt-3 d-md-none filters" id="filtersMenu">
                     <div class="card card-body">
-                        <select class="form-select mb-2">
+                        <select class="form-select mb-2" th:value="${priceSort}" onchange="this.form.submit()">
                             <option>Цена</option>
                             <option value="low-to-high">От дешевых к дорогим</option>
                             <option value="high-to-low">От дорогих к дешевым</option>
                         </select>
-                        <select class="form-select mb-2">
+                        <select class="form-select mb-2" th:value="${roomCount}" onchange="this.form.submit()">
                             <option>Комнаты</option>
                             <option value="1">1 комната</option>
                             <option value="2">2 комнаты</option>
                             <option value="3">3+ комнаты</option>
                         </select>
-                        <select class="form-select mb-2">
+                        <select class="form-select mb-2" th:value="${areaSize}" onchange="this.form.submit()">
                             <option>Площадь</option>
                             <option value="small">До 50 м²</option>
                             <option value="medium">50-100 м²</option>
@@ -198,6 +198,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script>
+    document.querySelectorAll('.form-select, .dropdown-menu input').forEach(element => {
+        element.addEventListener('change', function() {
+            this.form.submit();
+        });
+    });
+
     function toggleDropdown() {
         const dropdown = document.querySelector('.dropdown-multiselect');
         dropdown.classList.toggle('open');
@@ -229,14 +235,6 @@
             loadModalContent(modalType);
         });
 
-        dynamicModal.addEventListener('shown.bs.modal', function () {
-            document.body.style.overflow = 'visible';
-        });
-
-        dynamicModal.addEventListener('hidden.bs.modal', function () {
-            document.body.style.overflow = originalOverflow;
-        });
-
         function loadModalContent(modalType) {
             modalBody.innerHTML = 'Завантаження...';
 
@@ -261,33 +259,6 @@
                 .catch(err => modalBody.innerHTML = '<p>Помилка завантаження!</p>');
         }
 
-        dynamicModal.addEventListener('shown.bs.modal', function () {
-            originalOverflow = document.body.style.overflow;
-            originalPaddingRight = document.body.style.paddingRight;
-
-            document.body.style.overflow = 'visible';
-            document.body.style.paddingRight = '0px';
-
-            document.body.removeAttribute('tabindex');
-            document.body.style.setProperty('pointer-events', 'auto', 'important');
-        });
-
-        dynamicModal.addEventListener('hidden.bs.modal', function () {
-            document.body.style.overflow = originalOverflow;
-            document.body.style.paddingRight = originalPaddingRight;
-
-            document.body.style.removeProperty('overflow');
-            document.body.style.removeProperty('padding-right');
-            document.body.style.removeProperty('pointer-events');
-
-        });
-
-        window.addEventListener('resize', () => {
-            if (bootstrapModal._isShown) {
-                document.body.style.paddingRight = '0px';
-            }
-        });
-
         function attachSwitchHandler() {
             const switchButtons = modalBody.querySelectorAll('.switch-modal');
             switchButtons.forEach(button => {
@@ -299,5 +270,6 @@
             });
         }
     });
+
 </script>
 </html>

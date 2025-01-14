@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,24 @@ public class Property {
 
 	@Column(nullable = false, name = "status")
 	private String status;
+
+	@Column(nullable = false, name = "timePeriod")
+	private String timePeriod;
+
+	@Column(nullable = false, name = "roomCount")
+	private int roomCount;
+
+	@Column(nullable = false, name = "housingType")
+	private String housingType;
+
+	@Column(nullable = false, name = "area")
+	private float area;
+
+	@Column(nullable = false, name = "rating")
+	private float rating;
+
+	@Column(nullable = false, name = "publicationDate")
+	private LocalDate publicationDate;
 
 	@OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PropertyImage> images = new ArrayList<>();
