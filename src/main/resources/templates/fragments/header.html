@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
     <style>
+        .form-switch .form-check-input {
+            background-color: #fff;
+            border: 1px solid #000;
+            width: 60px;
+            height: 30px;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: #000;
+            border-color: #000;
+        }
+
+        .form-switch .form-check-input::before {
+            background-color: #000;
+        }
+
+        .form-switch .form-check-input:checked::before {
+            background-color: #fff;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -15,7 +34,7 @@
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <div class="col-md-2 header-logo">
-                        <a th:href="@{/main}">
+                        <a th:href="@{/home}">
                             <img th:src="@{/photo/header-file/logo.png}" alt="Логотип" />
                         </a>
                     </div>
@@ -39,13 +58,14 @@
                                 </a>
                             </li>
                             <li class="nav-item mx-1">
-                                <a th:if="${isAuthenticated}"
+                                <a th:if="${isAuthenticated != null and isAuthenticated}"
                                    class="nav-link login-button"
                                    th:href="@{/user/profile/{id}(id=${userId})}">
                                     <img src="/photo/header-file/icon-login.png" alt="Профіль">
                                     <span>Профіль</span>
                                 </a>
-                                <a th:if="${!isAuthenticated}"
+
+                                <a th:if="${isAuthenticated == null or !isAuthenticated}"
                                    class="nav-link login-button"
                                    href="#"
                                    data-modal-type="login"
@@ -78,13 +98,14 @@
                                     </a>
                                 </li>
                                 <li class="nav-item mx-1">
-                                    <a th:if="${isAuthenticated}"
+                                    <a th:if="${isAuthenticated != null and isAuthenticated}"
                                        class="nav-link login-button"
                                        th:href="@{/user/profile/{id}(id=${userId})}">
                                         <img src="/photo/header-file/icon-login.png" alt="Профіль">
                                         <span>Профіль</span>
                                     </a>
-                                    <a th:if="${!isAuthenticated}"
+
+                                    <a th:if="${isAuthenticated == null or !isAuthenticated}"
                                        class="nav-link login-button"
                                        href="#"
                                        data-modal-type="login"
