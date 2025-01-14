@@ -32,12 +32,17 @@ public class AuthController {
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(userValidator);
     }
-
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute("person") User person) {
-        System.out.println("Returning login page...");
+    public String loginPage(
+            @RequestParam(name = "loginRequired", required = false) Boolean loginRequired,
+            @ModelAttribute("person") User person
+    ) {
+        if (Boolean.TRUE.equals(loginRequired)) {
+            System.out.println("Login is required!");
+        }
         return "auth/login";
     }
+
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {

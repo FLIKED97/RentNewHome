@@ -27,7 +27,7 @@ public class HomeController {
                            @RequestParam(required = false) Integer roomCount,
                            @RequestParam(required = false) String priceSort,
                            @RequestParam(required = false) String areaSize,
-                           @RequestParam(name = "loginRequired", required = false) boolean loginRequired) {
+                           @RequestParam(name = "loginRequired", required = false, defaultValue = "false") boolean loginRequired) {
         Page<Property> properties = propertyService.getProperties(location, roomCount, priceSort, areaSize);
 
         model.addAttribute("properties", properties);
@@ -38,7 +38,12 @@ public class HomeController {
         model.addAttribute("properties", propertyService.getAllProperty());
         model.addAttribute("isAuthenticated", userService.isUserAuthenticated());
         model.addAttribute("userId", userService.getAuthenticatedUserId());
-        model.addAttribute("loginRequired", loginRequired);
+        boolean isLoginRequired = "true".equalsIgnoreCase(String.valueOf(loginRequired));
+        if (isLoginRequired) {
+            model.addAttribute("loginMessage", "Вам потрібно увійти для доступу до цієї сторінки.");
+            System.out.println("Користувач має увійти!");
+            model.addAttribute("loginRequired", loginRequired);
+        }
 
         return "index";
     }
