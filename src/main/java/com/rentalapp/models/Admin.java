@@ -22,7 +22,7 @@ public class Admin extends User {
 
 	@PrePersist
 	public void prePersist() {
-		setRole(UserRole.ADMIN);
+		setRole(UserRole.ROLE_ADMIN);
 	}
 
 	public Long getId() {

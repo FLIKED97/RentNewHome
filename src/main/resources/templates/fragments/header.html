@@ -39,7 +39,18 @@
                                 </a>
                             </li>
                             <li class="nav-item mx-1">
-                                <a class="nav-link login-button" href="#" data-modal-type="login" data-bs-toggle="modal" data-bs-target="#dynamicModal">
+                                <a th:if="${isAuthenticated}"
+                                   class="nav-link login-button"
+                                   th:href="@{/user/profile/{id}(id=${userId})}">
+                                    <img src="/photo/header-file/icon-login.png" alt="Профіль">
+                                    <span>Профіль</span>
+                                </a>
+                                <a th:if="${!isAuthenticated}"
+                                   class="nav-link login-button"
+                                   href="#"
+                                   data-modal-type="login"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#dynamicModal">
                                     <img src="/photo/header-file/icon-login.png" alt="Вхід">
                                     <span>Войти</span>
                                 </a>
@@ -67,9 +78,20 @@
                                     </a>
                                 </li>
                                 <li class="nav-item mx-1">
-                                    <a class="nav-link login-button" href="#" data-modal-type="login" data-bs-toggle="modal" data-bs-target="#dynamicModal">
-                                        <img src="/photo/header-file/icon-login.png" alt="Войти">
-                                        <span>Вхід</span>
+                                    <a th:if="${isAuthenticated}"
+                                       class="nav-link login-button"
+                                       th:href="@{/user/profile/{id}(id=${userId})}">
+                                        <img src="/photo/header-file/icon-login.png" alt="Профіль">
+                                        <span>Профіль</span>
+                                    </a>
+                                    <a th:if="${!isAuthenticated}"
+                                       class="nav-link login-button"
+                                       href="#"
+                                       data-modal-type="login"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#dynamicModal">
+                                        <img src="/photo/header-file/icon-login.png" alt="Вхід">
+                                        <span>Войти</span>
                                     </a>
                                 </li>
                             </ul>

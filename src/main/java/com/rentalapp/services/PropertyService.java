@@ -23,7 +23,7 @@ public class PropertyService {
     public Property addProperty(Long userId, String title, String description, float price, String location, String status) {
         // Перевірка чи користувач має роль "LANDLORD"
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        if (user.getRole() != UserRole.LANDLORD) {
+        if (user.getRole() != UserRole.ROLE_LANDLORD) {
             throw new RuntimeException("Only Landlords can add properties");
         }
 

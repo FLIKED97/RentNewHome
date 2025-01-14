@@ -4,6 +4,7 @@ import com.rentalapp.models.Property;
 import com.rentalapp.models.PropertyImage;
 import com.rentalapp.services.PropertyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

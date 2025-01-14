@@ -71,13 +71,13 @@ public class SecurityConfig {
                         ).hasRole("TENANT")
                         .requestMatchers(
                                 "/admin/**",
-                                "/management/**",
-                                "/users/**"
+                                "/management/**"
                         ).hasRole("ADMIN")
                         .requestMatchers(
                                 "/profile/**",
                                 "/messages/**",
-                                "/notifications/**"
+                                "/notifications/**",
+                                "/user/profile/**"  // Додано сюди
                         ).hasAnyRole("TENANT", "LANDLORD", "ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -90,7 +90,12 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/auth/login")
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                .rememberMe(remember -> remember
+                        .tokenValiditySeconds(86400) // 24 години
+                        .key("uniqueAndSecret")
                 )
                 .authenticationProvider(authenticationProvider());
         return http.build();
