@@ -33,6 +33,15 @@ public class Property {
 	@Column(nullable = false, name = "price")
 	private float price;
 
+	@Column(name = "residential_complex")  // ЖК
+	private String residentialComplex;
+
+	@Column(name = "district")  // Район (Приморский)
+	private String district;
+
+	@Column(name = "area_name")  // Мікрорайон (Аркадія)
+	private String areaName; //TODO Добавити вивід цих полів і добавлення нових полів у форму
+
 	@Column(nullable = false, name = "location")
 	private String location;
 
@@ -42,14 +51,18 @@ public class Property {
 	@Column(nullable = false, name = "timePeriod")
 	private String timePeriod;
 
-	@Column(nullable = false, name = "roomCount")
-	private int roomCount;
 
 	@Column(nullable = false, name = "housingType")
 	private String housingType;
 
 	@Column(nullable = false, name = "area")
 	private float area;
+
+	@Column(nullable = false, name = "floor")
+	private int floor;
+
+	@Column(nullable = false, name = "roomCount")
+	private int roomCount;
 
 	@Column(nullable = false, name = "rating")
 	private float rating;
@@ -59,4 +72,22 @@ public class Property {
 
 	@OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PropertyImage> images = new ArrayList<>();
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(
+			name = "property_tags",
+			joinColumns = @JoinColumn(name = "property_id"),
+			inverseJoinColumns = @JoinColumn(name = "tag_id")
+	)
+	private List<Tag> tags = new ArrayList<>();
+
+	// Зручний метод для додавання тегів
+	public void addTag(Tag tag) {
+		tags.add(tag);
+		tag.getProperties().add(this);
+	}
+
+	public void removeTag(Tag tag) {
+		tags.remove(tag);
+		tag.getProperties().remove(this);
+	}
 }

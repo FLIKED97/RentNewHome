@@ -225,19 +225,19 @@
                             <span th:text="${property.location}"></span>
                             <img th:src="@{/photo/main-file/location-icon.png}" alt="Location Icon" class="location-icon">
                         </p>
-                        <p class="details">ЖК Кадор • Аркаія • Приморский • Одеса</p>
+                        <p class="details" th:text="${property.residentialComplex + ' • ' +
+                            property.areaName + ' • ' +
+                            property.district + ' • ' +
+                            property.location}"></p>
                         <ul class="characteristics">
-                            <li th:text="'Кімнат: 1 • Площа: 28 • Поверх: 2 з 22'"></li>
+                            <li th:text="'Кімнат: ' + ${property.roomCount} + ' • Площа: ' + ${#numbers.formatDecimal(property.area, 1, 1)} + ' • Поверх: ' + ${property.floor}"></li>
                         </ul>
                         <div class="filter-group">
-                            <p class="filter-object">Поруч з парком</p>
-                            <p class="filter-object">Кухня студія</p>
-                            <p class="filter-object">Індивідуальне опалення</p>
+                            <p class="filter-object" th:each="tag : ${property.tags}" th:text="${tag.name}"></p>
                         </div>
                         <p class="description" th:text="${property.description}">Опис об'єкта</p>
-                        <p class="date-obj">Опубліковано 24 жов.</p>
+                        <p class="date-obj" th:text="'Опубліковано ' + ${#temporals.format(property.publicationDate, 'd MMM')}"></p>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>

@@ -35,8 +35,10 @@ public class HomeController {
         model.addAttribute("roomCount", roomCount);
         model.addAttribute("priceSort", priceSort);
         model.addAttribute("areaSize", areaSize);
+
         model.addAttribute("isAuthenticated", userService.isUserAuthenticated());
         model.addAttribute("userId", userService.getAuthenticatedUserId());
+
         boolean isLoginRequired = "true".equalsIgnoreCase(String.valueOf(loginRequired));
         if (isLoginRequired) {
             model.addAttribute("loginMessage", "Вам потрібно увійти для доступу до цієї сторінки.");
