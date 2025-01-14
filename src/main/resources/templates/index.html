@@ -71,47 +71,104 @@
                 </div>
                 <div class="collapse mt-3 d-md-none filters" id="filtersMenu">
                     <div class="card card-body">
-                        <select class="form-select mb-2" th:value="${priceSort}" onchange="this.form.submit()">
-                            <option>Цена</option>
-                            <option value="low-to-high">От дешевых к дорогим</option>
-                            <option value="high-to-low">От дорогих к дешевым</option>
-                        </select>
-                        <select class="form-select mb-2" th:value="${roomCount}" onchange="this.form.submit()">
-                            <option>Комнаты</option>
-                            <option value="1">1 комната</option>
-                            <option value="2">2 комнаты</option>
-                            <option value="3">3+ комнаты</option>
-                        </select>
-                        <select class="form-select mb-2" th:value="${areaSize}" onchange="this.form.submit()">
-                            <option>Площадь</option>
-                            <option value="small">До 50 м²</option>
-                            <option value="medium">50-100 м²</option>
-                            <option value="large">Больше 100 м²</option>
-                        </select>
-                        <div class="dropdown-multiselect">
-                            <button class="dropdown-toggle" onclick="toggleDropdown()">
-                                Фильтры
-                                <img src="/photo/main-file/down.svg" alt="Dropdown Arrow" class="dropdown-icon">
-                            </button>
-                            <div class="dropdown-menu">
-                                <label>
-                                    <input type="checkbox" value="kyiv"> Київ
-                                </label>
-                                <label>
-                                    <input type="checkbox" value="odessa"> Одеса
-                                </label>
-                                <label>
-                                    <input type="checkbox" value="lviv"> Львів
-                                </label>
-                                <label>
-                                    <input type="checkbox" value="kharkiv"> Харків
-                                </label>
-                                <label>
-                                    <input type="checkbox" value="dnipro"> Дніпро
-                                </label>
+                        <form id="filtersForm" method="get" action="/">
+                            <!-- Сортування за ціною -->
+                            <select class="form-select mb-2" name="priceSort">
+                                <option value="" th:selected="${priceSort == null}">Цена</option>
+                                <option value="low-to-high" th:selected="${priceSort == 'low-to-high'}">От дешевых к дорогим</option>
+                                <option value="high-to-low" th:selected="${priceSort == 'high-to-low'}">От дорогих к дешевым</option>
+                            </select>
+
+                            <!-- Кількість кімнат -->
+                            <select class="form-select mb-2" name="roomCount">
+                                <option value="" th:selected="${roomCount == null}">Комнаты</option>
+                                <option value="1" th:selected="${roomCount == 1}">1 комната</option>
+                                <option value="2" th:selected="${roomCount == 2}">2 комнаты</option>
+                                <option value="3" th:selected="${roomCount == 3}">3+ комнаты</option>
+                            </select>
+
+                            <!-- Площа -->
+                            <select class="form-select mb-2" name="areaSize">
+                                <option value="" th:selected="${areaSize == null}">Площадь</option>
+                                <option value="small" th:selected="${areaSize == 'small'}">До 50 м²</option>
+                                <option value="medium" th:selected="${areaSize == 'medium'}">50-100 м²</option>
+                                <option value="large" th:selected="${areaSize == 'large'}">Больше 100 м²</option>
+                            </select>
+
+                            <!-- Локація -->
+                            <div class="dropdown-multiselect">
+                                <button type="button" class="dropdown-toggle" onclick="toggleDropdown()">
+                                    Фильтры
+                                    <img src="/photo/main-file/down.svg" alt="Dropdown Arrow" class="dropdown-icon">
+                                </button>
+                                <div class="dropdown-menu">
+                                    <label>
+                                        <input type="checkbox" name="location" value="kyiv" th:checked="${location?.contains('kyiv')}"> Київ
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="location" value="odessa" th:checked="${location?.contains('odessa')}"> Одеса
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="location" value="lviv" th:checked="${location?.contains('lviv')}"> Львів
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="location" value="kharkiv" th:checked="${location?.contains('kharkiv')}"> Харків
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="location" value="dnipro" th:checked="${location?.contains('dnipro')}"> Дніпро
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+
+                            <!-- Кнопка -->
+                            <button type="submit" class="btn btn-primary mt-3">Застосувати фільтри</button>
+                        </form>
                     </div>
+                </div>
+
+                <!--                <div class="collapse mt-3 d-md-none filters" id="filtersMenu">-->
+<!--                    <div class="card card-body">-->
+<!--                        <select class="form-select mb-2" th:value="${priceSort}">-->
+<!--                            <option>Цена</option>-->
+<!--                            <option value="low-to-high">От дешевых к дорогим</option>-->
+<!--                            <option value="high-to-low">От дорогих к дешевым</option>-->
+<!--                        </select>-->
+<!--                        <select class="form-select mb-2" th:value="${roomCount}">-->
+<!--                            <option>Комнаты</option>-->
+<!--                            <option value="1">1 комната</option>-->
+<!--                            <option value="2">2 комнаты</option>-->
+<!--                            <option value="3">3+ комнаты</option>-->
+<!--                        </select>-->
+<!--                        <select class="form-select mb-2" th:value="${areaSize}">-->
+<!--                            <option>Площадь</option>-->
+<!--                            <option value="small">До 50 м²</option>-->
+<!--                            <option value="medium">50-100 м²</option>-->
+<!--                            <option value="large">Больше 100 м²</option>-->
+<!--                        </select>-->
+<!--                        <div class="dropdown-multiselect">-->
+<!--                            <button class="dropdown-toggle" onclick="toggleDropdown()">-->
+<!--                                Фильтры-->
+<!--                                <img src="/photo/main-file/down.svg" alt="Dropdown Arrow" class="dropdown-icon">-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" value="kyiv"> Київ-->
+<!--                                </label>-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" value="odessa"> Одеса-->
+<!--                                </label>-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" value="lviv"> Львів-->
+<!--                                </label>-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" value="kharkiv"> Харків-->
+<!--                                </label>-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" value="dnipro"> Дніпро-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
