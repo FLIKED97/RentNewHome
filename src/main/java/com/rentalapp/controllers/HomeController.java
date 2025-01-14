@@ -35,7 +35,6 @@ public class HomeController {
         model.addAttribute("roomCount", roomCount);
         model.addAttribute("priceSort", priceSort);
         model.addAttribute("areaSize", areaSize);
-        model.addAttribute("properties", propertyService.getAllProperty());
         model.addAttribute("isAuthenticated", userService.isUserAuthenticated());
         model.addAttribute("userId", userService.getAuthenticatedUserId());
         boolean isLoginRequired = "true".equalsIgnoreCase(String.valueOf(loginRequired));

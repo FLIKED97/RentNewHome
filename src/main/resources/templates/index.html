@@ -24,22 +24,24 @@
                     </button>
                 </div>
                 <div class="col-auto d-none d-md-flex filters">
-                    <select class="form-select" onchange="applyFilters()">
-                        <option>Цена</option>
-                        <option value="low-to-high">От дешевых к дорогим</option>
-                        <option value="high-to-low">От дорогих к дешевым</option>
+                    <select class="form-select" id="priceSort" name="priceSort" onchange="applyFilters()">
+                        <option value="">Цена</option>
+                        <option value="low-to-high" th:selected="${priceSort == 'low-to-high'}">От дешевых к дорогим</option>
+                        <option value="high-to-low" th:selected="${priceSort == 'high-to-low'}">От дорогих к дешевым</option>
                     </select>
-                    <select class="form-select" onchange="applyFilters()">
-                        <option>Комнаты</option>
-                        <option value="1">1 комната</option>
-                        <option value="2">2 комнаты</option>
-                        <option value="3">3+ комнаты</option>
+
+                    <select class="form-select" id="roomCount" name="roomCount" onchange="applyFilters()">
+                        <option value="">Комнаты</option>
+                        <option value="1" th:selected="${roomCount == 1}">1 комната</option>
+                        <option value="2" th:selected="${roomCount == 2}">2 комнаты</option>
+                        <option value="3" th:selected="${roomCount == 3}">3+ комнаты</option>
                     </select>
-                    <select class="form-select" onchange="applyFilters()">
-                        <option>Площадь</option>
-                        <option value="small">До 50 м²</option>
-                        <option value="medium">50-100 м²</option>
-                        <option value="large">Больше 100 м²</option>
+
+                    <select class="form-select" id="areaSize" name="areaSize" onchange="applyFilters()">
+                        <option value="">Площадь</option>
+                        <option value="small" th:selected="${areaSize == 'small'}">До 50 м²</option>
+                        <option value="medium" th:selected="${areaSize == 'medium'}">50-100 м²</option>
+                        <option value="large" th:selected="${areaSize == 'large'}">Больше 100 м²</option>
                     </select>
                     <div class="dropdown-multiselect">
                         <button class="dropdown-toggle" onclick="toggleDropdown()">
@@ -258,32 +260,29 @@
 <script src="/js/header-login.js"></script>
 <script>
     function applyFilters() {
-    // Збираємо дані з фільтрів
-    const priceSort = document.getElementById("priceSort").value;
-    const roomCount = document.getElementById("roomCount").value;
-    const areaSize = document.getElementById("areaSize").value;
+        const priceSort = document.getElementById('priceSort').value;
+        const roomCount = document.getElementById('roomCount').value;
+        const areaSize = document.getElementById('areaSize').value;
+        const locationCheckboxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked');
+        const locations = Array.from(locationCheckboxes).map(cb => cb.value);
 
-    // Збираємо вибрані локації
-    const locations = Array.from(document.querySelectorAll(".location:checked"))
-        .map((checkbox) => checkbox.value);
+        let url = '/home?';
+        if (priceSort) url += `priceSort=${priceSort}&`;
+        if (roomCount) url += `roomCount=${roomCount}&`;
+        if (areaSize) url += `areaSize=${areaSize}&`;
+        if (locations.length) url += locations.map(loc => `location=${loc}`).join('&');
 
-    // Формуємо запит
-    const params = new URLSearchParams({
-        priceSort,
-        roomCount,
-        areaSize,
-        location: locations.join(","),
-    });
+        // Use fetch to get updated results
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newProperties = doc.getElementById('propertiesСontainer');
+                document.getElementById('properties-container').innerHTML = newProperties.innerHTML;
+            });
+    }
 
-    // Відправляємо AJAX-запит
-    fetch(`/home?${params.toString()}`)
-        .then((response) => response.text())
-        .then((html) => {
-            // Оновлюємо контейнер з результатами
-            document.getElementById("propertiesContainer").innerHTML = html;
-        })
-        .catch((error) => console.error("Error:", error));
-}
 
 </script>
 </html>
