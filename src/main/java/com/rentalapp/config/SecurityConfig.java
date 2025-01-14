@@ -3,6 +3,7 @@ package com.rentalapp.config;
 
 import com.rentalapp.security.SecurityHandler;
 import com.rentalapp.services.PersonDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -85,11 +86,37 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
                         .usernameParameter("email")
-                        .successHandler(securityHandler)
-                        .failureUrl("/auth/login?error")
+                        .successHandler((request, response, authentication) -> {
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.setStatus(HttpServletResponse.SC_OK);
+                                response.getWriter().write("success");
+                            } else {
+                                response.sendRedirect("/home");
+                            }
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.getWriter().write("error");
+                            } else {
+                                response.sendRedirect("/auth/login?error");
+                            }
+                        })
                 )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                            } else {
+                                response.sendRedirect("/home?loginRequired");
+                            }
+                        })
+                )
+
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/auth/login")
+                        .logoutUrl("/auth/logout") // Вихід через /auth/logout
+                        .logoutSuccessUrl("/home?logout") // Редірект після виходу
+                        .invalidateHttpSession(true) // Завершення сесії
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )

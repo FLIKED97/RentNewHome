@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,17 +34,20 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute("person") User person){
+    public String loginPage(@ModelAttribute("person") User person) {
+        System.out.println("Returning login page...");
         return "auth/login";
     }
-    @GetMapping("/logout")
+
+    @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/auth/login?logout";
+        return "redirect:/home?logout";
     }
+
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
         model.addAttribute("person", new User());

@@ -3,6 +3,7 @@ package com.rentalapp.controllers;
 import com.rentalapp.models.Property;
 import com.rentalapp.models.PropertyImage;
 import com.rentalapp.services.PropertyService;
+import com.rentalapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,11 +21,13 @@ import java.util.List;
 public class HomeController {
 
     private final PropertyService propertyService;
+    private final UserService userService;
     @GetMapping()
     public String homePage(Model model, @RequestParam(required = false) List<String> location,
                            @RequestParam(required = false) Integer roomCount,
                            @RequestParam(required = false) String priceSort,
-                           @RequestParam(required = false) String areaSize) {
+                           @RequestParam(required = false) String areaSize,
+                           @RequestParam(name = "loginRequired", required = false) boolean loginRequired) {
         Page<Property> properties = propertyService.getProperties(location, roomCount, priceSort, areaSize);
 
         model.addAttribute("properties", properties);
@@ -33,6 +36,10 @@ public class HomeController {
         model.addAttribute("priceSort", priceSort);
         model.addAttribute("areaSize", areaSize);
         model.addAttribute("properties", propertyService.getAllProperty());
+        model.addAttribute("isAuthenticated", userService.isUserAuthenticated());
+        model.addAttribute("userId", userService.getAuthenticatedUserId());
+        model.addAttribute("loginRequired", loginRequired);
+
         return "index";
     }
     @GetMapping("/error")

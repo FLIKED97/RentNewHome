@@ -11,9 +11,15 @@ public class UserService {
 
     public boolean isUserAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && authentication.isAuthenticated() &&
+        if (authentication == null) {
+            System.out.println("Authentication is null");
+            return false;
+        }
+        System.out.println("Authentication: " + authentication);
+        return authentication.isAuthenticated() &&
                 !(authentication.getPrincipal() instanceof String && authentication.getPrincipal().equals("anonymousUser"));
     }
+
 
     public Long getAuthenticatedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
