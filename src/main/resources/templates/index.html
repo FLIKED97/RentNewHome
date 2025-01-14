@@ -243,10 +243,10 @@
             let fetchUrl;
             if (modalType === 'login') {
                 modalTitle.textContent = 'Вхід на сайт';
-                fetchUrl = '/home/login';
+                fetchUrl = '/auth/login';
             } else if (modalType === 'registration') {
                 modalTitle.textContent = 'Реєстрація на сайті';
-                fetchUrl = '/home/registration';
+                fetchUrl = '/auth/registration';
             } else {
                 modalBody.innerHTML = '<p>Невідомий тип модального вікна!</p>';
                 return;

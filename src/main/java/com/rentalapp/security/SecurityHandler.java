@@ -32,7 +32,7 @@ public class SecurityHandler implements AuthenticationSuccessHandler {
             redirectUrl = "/landlord/dashboard";
             log.info("Landlord {} successfully logged in", username);
         } else if (roles.contains("ROLE_TENANT")) {
-            redirectUrl = "/tenant/dashboard";
+            redirectUrl = "/home";
             log.info("Tenant {} successfully logged in", username);
         }
 

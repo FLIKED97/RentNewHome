@@ -1,6 +1,7 @@
 package com.rentalapp.services;
 
 
+import com.rentalapp.Exception.UserAlreadyExistsException;
 import com.rentalapp.models.User;
 import com.rentalapp.models.UserRole;
 import com.rentalapp.repositories.UserRepository;
@@ -24,7 +25,10 @@ public class RegistrationService {
     }
     @Transactional
     public void register(User person){
-        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        if (peopleRepository.findByEmail(person.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException("Користувач з email " + person.getEmail() + " вже існує");
+        }
+        person.setRating(0.0f);
         person.setRole(UserRole.TENANT);
 
         peopleRepository.save(person);

@@ -23,20 +23,8 @@ public class HomeController {
         model.addAttribute("properties", propertyService.getAllProperty());
         return "index";
     }
-    @GetMapping("/login")
-    public String loginPage() {
-        return "auth/login";
-    }
-    @GetMapping("/registration")
-    public String registrationPage() {
-        return "auth/registration";
-    }
     @GetMapping("/error")
     public String errorPage(){
         return "errors/error404";
-    }
-    @GetMapping("/error2")
-    public String errorPage2(){
-        return "errors/error2";
     }
 }

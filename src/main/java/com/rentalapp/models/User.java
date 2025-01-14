@@ -37,8 +37,8 @@ public class User {
 	@Column(name = "role", nullable = false)
 	private UserRole role;
 
-	@Column(name = "rating", nullable = false)
-	private float rating;  // Рекомендується для фінансових або точних чисел
+	@Column(name = "rating")
+	private float rating;
 
 	@OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Property> properties = new ArrayList<>();
