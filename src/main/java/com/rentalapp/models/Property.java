@@ -22,7 +22,7 @@ public class Property {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "landlord_id", nullable = false)
-	private User landlord;  // Замінено Landlord на User
+	private User landlord;
 
 	@Column(nullable = false, name = "title")
 	private String title;

@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/registration", "/auth/**", "/home/**").permitAll()
                         .requestMatchers(
                                 "/landlord/**",
-                                "/properties/create/**",
+                                "/properties/add/**",
                                 "/properties/edit/**",
                                 "/properties/delete/**"
                         ).hasRole("LANDLORD")

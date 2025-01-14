@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,25 +26,17 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
 
-    public Property addProperty(Long userId, String title, String description, float price, String location,Integer roomCount,float area, String status) {
-        // Перевірка чи користувач має роль "LANDLORD"
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    private final UserService userService;
+
+    public Property addProperty(Property property) {
+
+        User user = userRepository.findById(userService.getAuthenticatedUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getRole() != UserRole.ROLE_LANDLORD) {
             throw new RuntimeException("Only Landlords can add properties");
         }
 
-        // Створення нового оголошення
-        Property property = new Property();
         property.setLandlord(user);
-        property.setTitle(title);
-        property.setDescription(description);
-        property.setPrice(price);
-        property.setLocation(location);
-        property.setRoomCount(roomCount);
-        property.setArea(area);
-        property.setStatus(status);
-
-        // Збереження оголошення в базі даних
+        property.setPublicationDate(LocalDate.now());
         return propertyRepository.save(property);
     }
 

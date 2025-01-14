@@ -11,37 +11,27 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/properties")
 @RequiredArgsConstructor
 public class PropertyController {
     private final PropertyService propertyService;
 
-    @PostMapping("/add")
-    public String addProperty(){
-        return null;
+    @GetMapping("/add")
+    public String getNewProperty(Model model){
+        model.addAttribute("property", new Property());
+        return "property/addProperty";
     }
-
-    @GetMapping()
-    public String getProperties(@RequestParam(required = false) List<String> location,
-                                @RequestParam(required = false) Integer roomCount,
-                                @RequestParam(required = false) String priceSort,
-                                @RequestParam(required = false) String areaSize,
-                                Model model) {
-        Page<Property> properties = propertyService.getProperties(location, roomCount, priceSort, areaSize);
-
-        model.addAttribute("properties", properties);
-        model.addAttribute("location", location);
-        model.addAttribute("roomCount", roomCount);
-        model.addAttribute("priceSort", priceSort);
-        model.addAttribute("areaSize", areaSize);
-
-        return "index";
+    @PostMapping("/add")
+    public String addProperty(@ModelAttribute("property") Property property){
+        propertyService.addProperty(property);
+        return "redirect:/home";
     }
 
 }
