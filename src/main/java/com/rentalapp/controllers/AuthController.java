@@ -33,13 +33,7 @@ public class AuthController {
         binder.addValidators(userValidator);
     }
     @GetMapping("/login")
-    public String loginPage(
-            @RequestParam(name = "loginRequired", required = false) Boolean loginRequired,
-            @ModelAttribute("person") User person
-    ) {
-        if (Boolean.TRUE.equals(loginRequired)) {
-            System.out.println("Login is required!");
-        }
+    public String loginPage(@ModelAttribute("person") User person) {
         return "auth/login";
     }
 

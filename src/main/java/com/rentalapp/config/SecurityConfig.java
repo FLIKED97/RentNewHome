@@ -56,7 +56,8 @@ public class SecurityConfig {
                                 "/home/**",
                                 "/css/**",
                                 "/js/**",
-                                "/photo/**"  // Додано доступ до фото
+                                "/photo/**", // Додано доступ до фото
+                                "/*"
                         ).permitAll()
                         .requestMatchers("/auth/registration", "/auth/**", "/home/**").permitAll()
                         .requestMatchers(
@@ -112,7 +113,6 @@ public class SecurityConfig {
                             }
                         })
                 )
-
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout") // Вихід через /auth/logout
                         .logoutSuccessUrl("/home?logout") // Редірект після виходу
