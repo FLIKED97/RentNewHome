@@ -48,12 +48,6 @@ public class PropertyService {
             imagePropertyService.saveImage(files, property);
         }
     }
-
-    public List<Property> getAllProperty() {
-        return propertyRepository.findAll();
-    }
-
-
     public Page<Property> getProperties(List<String> location, Integer roomCount, String priceSort, String areaSize, int page) {
         int pageSize = 5; // Кількість елементів на сторінці
         Specification<Property> specification = Specification.where(null);

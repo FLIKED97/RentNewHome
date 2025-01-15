@@ -115,11 +115,16 @@
     border-color: #e74c3c;
 }
 
-/* Додаткові стилі для required полів */
-.ct label::after {
+/* Зірочка тільки для лейблів з класом required-label */
+.required-label::after {
     content: '*';
     color: #e74c3c;
     margin-left: 4px;
+}
+
+/* Вимкнути зірочку для інших лейблів */
+label::after {
+    content: none;
 }
 .tags-container {
     display: flex;

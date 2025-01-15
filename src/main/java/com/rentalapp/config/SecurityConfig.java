@@ -56,7 +56,7 @@ public class SecurityConfig {
                                 "/home/**",
                                 "/css/**",
                                 "/js/**",
-                                "/photo/**", // Додано доступ до фото
+                                "/photo/**",
                                 "/*",
                                 "/images/property/**"
                         ).permitAll()
@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 "/profile/**",
                                 "/messages/**",
                                 "/notifications/**",
-                                "/user/profile/**"  // Додано сюди
+                                "/user/profile/**"
                         ).hasAnyRole("TENANT", "LANDLORD", "ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -115,17 +115,19 @@ public class SecurityConfig {
                         })
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout") // Вихід через /auth/logout
-                        .logoutSuccessUrl("/home?logout") // Редірект після виходу
-                        .invalidateHttpSession(true) // Завершення сесії
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/home?logout")
+                        .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .rememberMe(remember -> remember
-                        .tokenValiditySeconds(86400) // 24 години
+                        .tokenValiditySeconds(86400)
                         .key("uniqueAndSecret")
+                        .userDetailsService(personDetailsService)
                 )
                 .authenticationProvider(authenticationProvider());
+
         return http.build();
     }
 

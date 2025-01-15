@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable("id") int id, Authentication authentication) {
         if (authentication == null) {
