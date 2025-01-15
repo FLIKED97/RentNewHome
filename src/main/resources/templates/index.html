@@ -45,35 +45,25 @@
                     </select>
                     <div class="dropdown-multiselect">
                         <button class="dropdown-toggle" onclick="toggleDropdown()">
-                            Місто
+                            Фильтры
                             <img th:src="@{/photo/main-file/down.svg}" alt="Dropdown Arrow" class="dropdown-icon">
                         </button>
                         <div class="dropdown-menu">
-                            <select class="form-select" data-filter="city" name="city" onchange="applyFilters()">
-                                <option value="kyiv" th:selected="${city == 'kyiv'}">Київ</option>
-                                <option value="odessa" th:selected="${city == 'odessa'}">Одеса</option>
-                                <option value="lviv" th:selected="${city == 'lviv'}">Львів</option>
-                                <option value="kharkiv" th:selected="${city == 'kharkiv'}">Харків</option>
-                                <option value="dnipro" th:selected="${city == 'dnipro'}">Дніпро</option>
-
-
-<!--                            <label>-->
-<!--                                <input type="checkbox" value="kyiv" onchange="applyFilters()"> Київ-->
-<!--                            </label>-->
-<!--                            <label>-->
-<!--                                <input type="checkbox" value="odessa" onchange="applyFilters()"> Одеса-->
-<!--                            </label>-->
-<!--                            <label>-->
-<!--                                <input type="checkbox" value="lviv" onchange="applyFilters()"> Львів-->
-<!--                            </label>-->
-<!--                            <label>-->
-<!--                                <input type="checkbox" value="kharkiv" onchange="applyFilters()"> Харків-->
-<!--                            </label>-->
-<!--                            <label>-->
-<!--                                <input type="checkbox" value="dnipro" onchange="applyFilters()"> Дніпро-->
-<!--                            </label>-->
-                            </select>
-
+                            <label>
+                                <input type="checkbox" value="kyiv" onchange="applyFilters()"> Київ
+                            </label>
+                            <label>
+                                <input type="checkbox" value="odessa" onchange="applyFilters()"> Одеса
+                            </label>
+                            <label>
+                                <input type="checkbox" value="lviv" onchange="applyFilters()"> Львів
+                            </label>
+                            <label>
+                                <input type="checkbox" value="kharkiv" onchange="applyFilters()"> Харків
+                            </label>
+                            <label>
+                                <input type="checkbox" value="dnipro" onchange="applyFilters()"> Дніпро
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -219,17 +209,14 @@
         const priceSort = document.querySelector('[data-filter="priceSort"]').value;
         const roomCount = document.querySelector('[data-filter="roomCount"]').value;
         const areaSize = document.querySelector('[data-filter="areaSize"]').value;
-
-        const locationSelected = document.querySelector('select[data-filter="areaSize"]');
-        const locationSelectedValues = Array.from(selectElement.selectedOptions).map(option => option.value);
-
-
+        const locationCheckboxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked');
+        const locations = Array.from(locationCheckboxes).map(cb => cb.value);
 
         let url = '/home?';
         if (priceSort) url += `priceSort=${priceSort}&`;
         if (roomCount) url += `roomCount=${roomCount}&`;
         if (areaSize) url += `areaSize=${areaSize}&`;
-        if (locationSelectedValues.length) url += locations.map(loc => `location=${loc}`).join('&');
+        if (locations.length) url += locations.map(loc => `location=${loc}`).join('&');
 
         // Use fetch to get updated results
         fetch(url)
