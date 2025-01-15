@@ -36,7 +36,7 @@ public class PropertyController {
     @PostMapping("/add")
     public String addProperty(@ModelAttribute("property") Property property,
                               @RequestParam(name = "selectedTags", required = false) List<Long> selectedTagIds,
-                              @RequestParam(name = "images", required = false) List<MultipartFile> files) {
+                              @RequestParam(name = "files", required = false) List<MultipartFile> files) {
 
         propertyService.addProperty(property,  selectedTagIds, files);
         return "redirect:/home";
