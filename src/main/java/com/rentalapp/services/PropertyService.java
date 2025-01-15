@@ -49,8 +49,8 @@ public class PropertyService {
     }
 
 
-    public Page<Property> getProperties(List<String> location, Integer roomCount, String priceSort, String areaSize) {
-        Pageable pageable = Pageable.ofSize(10);
+    public Page<Property> getProperties(List<String> location, Integer roomCount, String priceSort, String areaSize, int page) {
+        int pageSize = 5; // Кількість елементів на сторінці
         Specification<Property> specification = Specification.where(null);
 
         // Фільтрація за локацією
@@ -79,12 +79,14 @@ public class PropertyService {
         }
 
         // Сортування за ціною
+        Pageable pageable;
         if ("high-to-low".equals(priceSort)) {
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("price")));
+            pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Order.desc("price")));
         } else {
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.asc("price")));
+            pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Order.asc("price")));
         }
 
         return propertyRepository.findAll(specification, pageable);
     }
+
 }

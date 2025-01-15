@@ -1,7 +1,6 @@
 package com.rentalapp.controllers;
 
 import com.rentalapp.models.Property;
-import com.rentalapp.models.PropertyImage;
 import com.rentalapp.services.PropertyService;
 import com.rentalapp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +26,16 @@ public class HomeController {
                            @RequestParam(required = false) Integer roomCount,
                            @RequestParam(required = false) String priceSort,
                            @RequestParam(required = false) String areaSize,
+                           @RequestParam(defaultValue = "0") int page,
                            @RequestParam(name = "loginRequired", required = false, defaultValue = "false") boolean loginRequired) {
-        Page<Property> properties = propertyService.getProperties(location, roomCount, priceSort, areaSize);
+        // Отримуємо Page<Property>
+        Page<Property> propertiesPage = propertyService.getProperties(location, roomCount, priceSort, areaSize, page);
 
-        model.addAttribute("properties", properties);
+        // Додаємо базову інформацію про сторінки
+        model.addAttribute("properties", propertiesPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", propertiesPage.getTotalPages());
+
         model.addAttribute("location", location);
         model.addAttribute("roomCount", roomCount);
         model.addAttribute("priceSort", priceSort);
