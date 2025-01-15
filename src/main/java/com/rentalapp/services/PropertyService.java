@@ -1,13 +1,13 @@
 package com.rentalapp.services;
 
 import com.rentalapp.models.Property;
-import com.rentalapp.models.PropertyImage;
+import com.rentalapp.models.Tag;
 import com.rentalapp.models.User;
 import com.rentalapp.models.UserRole;
 import com.rentalapp.repositories.PropertyRepository;
+import com.rentalapp.repositories.TagRepository;
 import com.rentalapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -26,10 +25,14 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
 
+    private final TagService tagService;
     private final UserService userService;
 
-    public Property addProperty(Property property) {
-
+    public Property addProperty(Property property, List<Long> selectedTagIds) {
+        if (selectedTagIds != null) {
+            List<Tag> selectedTags = tagService.getTagsByIds(selectedTagIds);
+            property.setTags(selectedTags);
+        }
         User user = userRepository.findById(userService.getAuthenticatedUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getRole() != UserRole.ROLE_LANDLORD) {
             throw new RuntimeException("Only Landlords can add properties");
@@ -37,6 +40,7 @@ public class PropertyService {
 
         property.setLandlord(user);
         property.setPublicationDate(LocalDate.now());
+        property.setRating(0.0f);
         return propertyRepository.save(property);
     }
 
