@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/photo/**", // Додано доступ до фото
-                                "/*"
+                                "/*",
+                                "/images/property/**"
                         ).permitAll()
                         .requestMatchers("/auth/registration", "/auth/**", "/home/**").permitAll()
                         .requestMatchers(
