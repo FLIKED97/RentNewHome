@@ -255,21 +255,6 @@
     const files = event.target.files;
     const previewContainer = document.getElementById('previewContainer');
 
-    // Оновлюємо попередній перегляд з новими файлами
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.classList.add('img-thumbnail', 'm-2');
-        previewContainer.appendChild(img);
-      }
-
-      reader.readAsDataURL(file);
-    }
-
     // Додаємо нові файли до списку файлів в input
     const input = document.getElementById('fileInput');
     const currentFiles = input.files;
