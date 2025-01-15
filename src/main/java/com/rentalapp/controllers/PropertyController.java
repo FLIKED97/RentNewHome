@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -36,7 +37,7 @@ public class PropertyController {
     @PostMapping("/add")
     public String addProperty(@ModelAttribute("property") Property property,
                               @RequestParam(name = "selectedTags", required = false) List<Long> selectedTagIds,
-                              @RequestParam(name = "files", required = false) List<MultipartFile> files) {
+                              @RequestParam(name = "files", required = false) List<MultipartFile> files) throws IOException {
 
         propertyService.addProperty(property,  selectedTagIds, files);
         return "redirect:/home";

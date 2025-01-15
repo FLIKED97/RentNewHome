@@ -28,7 +28,7 @@ public class PropertyService {
     private final UserService userService;
     private final ImagePropertyService imagePropertyService;
 
-    public void addProperty(Property property, List<Long> selectedTagIds,List<MultipartFile> files) {
+    public void addProperty(Property property, List<Long> selectedTagIds,List<MultipartFile> files) throws IOException {
         if (selectedTagIds != null) {
             List<Tag> selectedTags = tagService.getTagsByIds(selectedTagIds);
             property.setTags(selectedTags);
@@ -45,17 +45,7 @@ public class PropertyService {
         property = propertyRepository.save(property); // Зберігаємо оновлений property
 
         if (files != null && !files.isEmpty()) {
-            try {
-                imagePropertyService.saveImage(files, property);
-                // Встановлюємо зв'язок з property для кожного фото
-//                for (PropertyImage image : savedImages) {
-//                    image.setProperty(property);
-//                    property.getImages().add(image);
-//                }
-//                List<PropertyImage> savedImages =
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to save property images", e);
-            }
+            imagePropertyService.saveImage(files, property);
         }
     }
 

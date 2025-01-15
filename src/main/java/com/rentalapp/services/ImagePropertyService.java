@@ -31,30 +31,25 @@ public class ImagePropertyService {
     private String applicationName;
 
     public void saveImage(List<MultipartFile> files, Property property) throws IOException {
-        // Отримуємо шлях до папки ресурсів проекту
-        String uploadDir = "src/main/resources/static/photo/property/";
+        // Змінюємо шлях на C:/uploads/property/ або свій
+        String uploadDir = "C:/uploads/property/";
 
         for (MultipartFile file : files) {
-            // Генерація унікального імені файлу
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-            // Створюємо повний шлях для збереження
             Path uploadPath = Paths.get(uploadDir);
             Path filePath = uploadPath.resolve(fileName);
 
-            // Створення директорії, якщо її немає
             Files.createDirectories(uploadPath);
 
-            // Збереження файлу
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            // Створення об'єкта Photo і збереження його в БД
             PropertyImage image = new PropertyImage();
             image.setFileName(fileName);
-            // URL для доступу до файлу через веб
-            image.setImageUrl("/photo/property/" + fileName);
+            // Змінюємо URL щоб відповідав налаштуванням ResourceHandler
+            image.setImageUrl("/images/property/" + fileName);
             image.setProperty(property);
             propertyImageRepository.save(image);
         }
