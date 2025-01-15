@@ -72,12 +72,34 @@
       </select>
     </div>
 
+    <div class="mb-3">
+      <label class="form-label">Фотографії*</label>
+      <div class="upload-zone p-3 text-center border rounded mb-2"
+           id="dropZone"
+           style="border: 2px dashed #ccc; cursor: pointer;">
+        <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+        <p class="mb-0">Перетягніть фото сюди або натисніть для вибору</p>
+        <input type="file"
+               name="images"
+               multiple
+               accept="image/*"
+               class="d-none"
+               id="imageInput"
+               required>
+      </div>
+      <div class="row" id="previewContainer"></div>
+    </div>
+
     <button type="submit" class="btn-submit">Додати оголошення</button>
   </form>
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+
+
+
   document.querySelectorAll('.form-select, .dropdown-menu input').forEach(element => {
     element.addEventListener('change', function() {
       this.form.submit();
