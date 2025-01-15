@@ -24,20 +24,20 @@
                     </button>
                 </div>
                 <div class="col-auto d-none d-md-flex filters">
-                    <select class="form-select" id="priceSort" name="priceSort" onchange="applyFilters()">
+                    <select class="form-select" data-filter="priceSort" name="priceSort" onchange="applyFilters()">
                         <option value="">Цена</option>
                         <option value="low-to-high" th:selected="${priceSort == 'low-to-high'}">От дешевых к дорогим</option>
                         <option value="high-to-low" th:selected="${priceSort == 'high-to-low'}">От дорогих к дешевым</option>
                     </select>
 
-                    <select class="form-select" id="roomCount" name="roomCount" onchange="applyFilters()">
+                    <select class="form-select" data-filter="roomCount" name="roomCount" onchange="applyFilters()">
                         <option value="">Комнаты</option>
                         <option value="1" th:selected="${roomCount == 1}">1 комната</option>
                         <option value="2" th:selected="${roomCount == 2}">2 комнаты</option>
                         <option value="3" th:selected="${roomCount == 3}">3+ комнаты</option>
                     </select>
 
-                    <select class="form-select" id="areaSize" name="areaSize" onchange="applyFilters()">
+                    <select class="form-select" data-filter="areaSize" name="areaSize" onchange="applyFilters()">
                         <option value="">Площадь</option>
                         <option value="small" th:selected="${areaSize == 'small'}">До 50 м²</option>
                         <option value="medium" th:selected="${areaSize == 'medium'}">50-100 м²</option>
@@ -69,17 +69,15 @@
                 </div>
                 <div class="collapse mt-3 d-md-none filters" id="filtersMenu">
                     <div class="card card-body">
-                        <form id="filtersForm" method="get" action="/">
-<!--                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                             <!-- Сортування за ціною -->
-                            <select class="form-select mb-2" name="priceSort">
+                            <select class="form-select mb-2" data-filter="priceSort" name="priceSort" onchange="applyFilters()">
                                 <option value="" th:selected="${priceSort == null}">Цена</option>
                                 <option value="low-to-high" th:selected="${priceSort == 'low-to-high'}">От дешевых к дорогим</option>
                                 <option value="high-to-low" th:selected="${priceSort == 'high-to-low'}">От дорогих к дешевым</option>
                             </select>
 
                             <!-- Кількість кімнат -->
-                            <select class="form-select mb-2" name="roomCount">
+                            <select class="form-select mb-2" data-filter="roomCount" name="roomCount" onchange="applyFilters()">
                                 <option value="" th:selected="${roomCount == null}">Комнаты</option>
                                 <option value="1" th:selected="${roomCount == 1}">1 комната</option>
                                 <option value="2" th:selected="${roomCount == 2}">2 комнаты</option>
@@ -87,7 +85,7 @@
                             </select>
 
                             <!-- Площа -->
-                            <select class="form-select mb-2" name="areaSize">
+                            <select class="form-select mb-2" data-filter="areaSize" name="areaSize" onchange="applyFilters()">
                                 <option value="" th:selected="${areaSize == null}">Площадь</option>
                                 <option value="small" th:selected="${areaSize == 'small'}">До 50 м²</option>
                                 <option value="medium" th:selected="${areaSize == 'medium'}">50-100 м²</option>
@@ -102,26 +100,22 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <label>
-                                        <input type="checkbox" name="location" value="kyiv" th:checked="${location?.contains('kyiv')}"> Київ
+                                        <input type="checkbox" name="location" value="kyiv" onchange="applyFilters()"> Київ
                                     </label>
                                     <label>
-                                        <input type="checkbox" name="location" value="odessa" th:checked="${location?.contains('odessa')}"> Одеса
+                                        <input type="checkbox" name="location" value="odessa" onchange="applyFilters()"> Одеса
                                     </label>
                                     <label>
-                                        <input type="checkbox" name="location" value="lviv" th:checked="${location?.contains('lviv')}"> Львів
+                                        <input type="checkbox" name="location" value="lviv" onchange="applyFilters()"> Львів
                                     </label>
                                     <label>
-                                        <input type="checkbox" name="location" value="kharkiv" th:checked="${location?.contains('kharkiv')}"> Харків
+                                        <input type="checkbox" name="location" value="kharkiv" onchange="applyFilters()"> Харків
                                     </label>
                                     <label>
-                                        <input type="checkbox" name="location" value="dnipro" th:checked="${location?.contains('dnipro')}"> Дніпро
+                                        <input type="checkbox" name="location" value="dnipro" onchange="applyFilters()"> Дніпро
                                     </label>
                                 </div>
                             </div>
-
-                            <!-- Кнопка -->
-                            <button type="submit" class="btn btn-primary mt-3">Застосувати фільтри</button>
-                        </form>
                     </div>
                 </div>
 
@@ -260,9 +254,9 @@
 <script src="/js/header-login.js"></script>
 <script>
     function applyFilters() {
-        const priceSort = document.getElementById('priceSort').value;
-        const roomCount = document.getElementById('roomCount').value;
-        const areaSize = document.getElementById('areaSize').value;
+        const priceSort = document.querySelector('[data-filter="priceSort"]').value;
+        const roomCount = document.querySelector('[data-filter="roomCount"]').value;
+        const areaSize = document.querySelector('[data-filter="areaSize"]').value;
         const locationCheckboxes = document.querySelectorAll('.dropdown-menu input[type="checkbox"]:checked');
         const locations = Array.from(locationCheckboxes).map(cb => cb.value);
 
@@ -278,7 +272,7 @@
             .then(html => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const newProperties = doc.getElementById('propertiesСontainer');
+                const newProperties = doc.getElementById('propertiesContainer');
                 document.getElementById('properties-container').innerHTML = newProperties.innerHTML;
             });
     }
