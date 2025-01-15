@@ -71,7 +71,7 @@
 <div th:replace="~{fragments/header :: header}"></div>
 <div class="container ct">
   <h1>Додати оголошення</h1>
-  <form th:action="@{/properties/add}" method="POST" th:object="${property}" class="property-form">
+  <form th:action="@{/properties/add}" method="POST" th:object="${property}" class="property-form" enctype="multipart/form-data">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <!-- Існуючі поля -->
@@ -173,7 +173,7 @@
       <i class="fas fa-cloud-upload-alt mb-3" style="font-size: 2.5rem; color: #6c757d;"></i>
       <h5>Натисніть або перетягніть фотографії сюди</h5>
     </div>
-    <input type="file" id="fileInput" multiple accept="image/*" class="d-none">
+    <input type="file" id="fileInput" name="files" multiple accept="image/*" class="d-none">
     <div id="previewContainer" class="preview-container"></div>
 
     <button type="submit" class="btn-submit">Додати оголошення</button>
