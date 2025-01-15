@@ -173,7 +173,7 @@
       <i class="fas fa-cloud-upload-alt mb-3" style="font-size: 2.5rem; color: #6c757d;"></i>
       <h5>Натисніть або перетягніть фотографії сюди</h5>
     </div>
-    <input type="file" id="fileInput" name="files" multiple accept="image/*" class="d-none">
+    <input type="file" id="fileInput" name="files" multiple accept="image/*" class="d-none" onchange="handleFileSelect(event)">
     <div id="previewContainer" class="preview-container"></div>
 
     <button type="submit" class="btn-submit">Додати оголошення</button>
@@ -250,38 +250,41 @@
       });
   }
 
-  // Handle form submission
-  form.addEventListener('submit', async (e) => {
-      e.preventDefault();
 
-      const formData = new FormData();
-      const fileInput = document.getElementById('fileInput');
+  function handleFileSelect(event) {
+    const files = event.target.files;
+    const previewContainer = document.getElementById('previewContainer');
 
-      // Додаємо всі файли до FormData
-      for (const file of fileInput.files) {
-          formData.append('files', file);
+    // Оновлюємо попередній перегляд з новими файлами
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('img-thumbnail', 'm-2');
+        previewContainer.appendChild(img);
       }
 
-      try {
-          const response = await fetch('/properties/add', {
-              method: 'POST',
-              body: formData
-          });
+      reader.readAsDataURL(file);
+    }
 
-          if (response.ok) {
-              alert('Фотографії успішно завантажені!');
-              // Очищаємо форму
-              form.reset();
-              previewContainer.innerHTML = '';
-          } else {
-              const error = await response.json();
-              alert(`Помилка: ${error.message || 'Щось пішло не так'}`);
-          }
-      } catch (error) {
-          console.error('Error:', error);
-          alert('Помилка при відправці файлів');
-      }
-  });
+    // Додаємо нові файли до списку файлів в input
+    const input = document.getElementById('fileInput');
+    const currentFiles = input.files;
+    const newFileList = new DataTransfer();
+
+    for (let i = 0; i < currentFiles.length; i++) {
+      newFileList.items.add(currentFiles[i]);
+    }
+    for (let i = 0; i < files.length; i++) {
+      newFileList.items.add(files[i]);
+    }
+
+    input.files = newFileList.files;
+  }
+
 </script>
 </body>
 </html>
