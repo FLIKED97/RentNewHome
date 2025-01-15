@@ -1,15 +1,19 @@
 package com.rentalapp.services;
 
+import com.rentalapp.models.Property;
 import com.rentalapp.models.PropertyImage;
 import com.rentalapp.repositories.PropertyImageRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,29 +27,37 @@ public class ImagePropertyService {
         this.propertyImageRepository = propertyImageRepository;
     }
     // Метод для збереження кількох фото
-    public List<PropertyImage> saveImage(List<MultipartFile> files) throws IOException {
-        List<PropertyImage> savedImages = new ArrayList<>();
+    @Value("${spring.application.name:default}")
+    private String applicationName;
+
+    public void saveImage(List<MultipartFile> files, Property property) throws IOException {
+        // Отримуємо шлях до папки ресурсів проекту
+        String uploadDir = "src/main/resources/static/photo/property/";
 
         for (MultipartFile file : files) {
             // Генерація унікального імені файлу
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get("/static/photo/property", fileName);
+
+            // Створюємо повний шлях для збереження
+            Path uploadPath = Paths.get(uploadDir);
+            Path filePath = uploadPath.resolve(fileName);
 
             // Створення директорії, якщо її немає
-            Files.createDirectories(filePath.getParent());
+            Files.createDirectories(uploadPath);
 
             // Збереження файлу
-            file.transferTo(filePath);
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
 
             // Створення об'єкта Photo і збереження його в БД
             PropertyImage image = new PropertyImage();
             image.setFileName(fileName);
-            image.setImageUrl("/static/photo/property" + fileName);
-
-            savedImages.add(propertyImageRepository.save(image));
+            // URL для доступу до файлу через веб
+            image.setImageUrl("/photo/property/" + fileName);
+            image.setProperty(property);
+            propertyImageRepository.save(image);
         }
-
-        return savedImages;
     }
     public void deleteImage(Long imageId) throws IOException {
         // Знаходимо фото за його ID
