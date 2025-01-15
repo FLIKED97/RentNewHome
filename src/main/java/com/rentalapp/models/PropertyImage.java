@@ -20,6 +20,9 @@ public class PropertyImage {
 	@JoinColumn(name = "property_id", nullable = false)
 	private Property property;
 
+	@Column(nullable = false, name = "file_name")
+	private String fileName;
+
 	@Column(nullable = false, name = "image_url")
 	private String imageUrl;
 }

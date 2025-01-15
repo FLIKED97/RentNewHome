@@ -1,9 +1,6 @@
 package com.rentalapp.services;
 
-import com.rentalapp.models.Property;
-import com.rentalapp.models.Tag;
-import com.rentalapp.models.User;
-import com.rentalapp.models.UserRole;
+import com.rentalapp.models.*;
 import com.rentalapp.repositories.PropertyRepository;
 import com.rentalapp.repositories.TagRepository;
 import com.rentalapp.repositories.UserRepository;
@@ -14,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,8 +26,9 @@ public class PropertyService {
 
     private final TagService tagService;
     private final UserService userService;
+    private final ImagePropertyService imagePropertyService;
 
-    public Property addProperty(Property property, List<Long> selectedTagIds) {
+    public Property addProperty(Property property, List<Long> selectedTagIds,List<MultipartFile> files) {
         if (selectedTagIds != null) {
             List<Tag> selectedTags = tagService.getTagsByIds(selectedTagIds);
             property.setTags(selectedTags);
@@ -41,7 +41,23 @@ public class PropertyService {
         property.setLandlord(user);
         property.setPublicationDate(LocalDate.now());
         property.setRating(0.0f);
-        return propertyRepository.save(property);
+
+        propertyRepository.save(property);
+
+        if (files != null && !files.isEmpty()) {
+            try {
+                List<PropertyImage> savedImages = imagePropertyService.saveImage(files);
+                // Встановлюємо зв'язок з property для кожного фото
+                for (PropertyImage image : savedImages) {
+                    image.setProperty(property);
+                    property.getImages().add(image);
+                }
+                property = propertyRepository.save(property); // Зберігаємо оновлений property
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save property images", e);
+            }
+        }
+        return property;
     }
 
     public List<Property> getAllProperty() {

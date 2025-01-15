@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,9 +35,10 @@ public class PropertyController {
     }
     @PostMapping("/add")
     public String addProperty(@ModelAttribute("property") Property property,
-                              @RequestParam(name = "selectedTags", required = false) List<Long> selectedTagIds){
+                              @RequestParam(name = "selectedTags", required = false) List<Long> selectedTagIds,
+                              @RequestParam(name = "images", required = false) List<MultipartFile> files) {
 
-        propertyService.addProperty(property,  selectedTagIds);
+        propertyService.addProperty(property,  selectedTagIds, files);
         return "redirect:/home";
     }
 
