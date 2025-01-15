@@ -273,7 +273,7 @@
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const newProperties = doc.getElementById('propertiesContainer');
-                document.getElementById('properties-container').innerHTML = newProperties.innerHTML;
+                document.getElementById('propertiesContainer').innerHTML = newProperties.innerHTML;
             });
     }
 
