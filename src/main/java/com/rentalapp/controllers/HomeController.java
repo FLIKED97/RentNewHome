@@ -35,6 +35,7 @@ public class HomeController {
         model.addAttribute("properties", propertiesPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", propertiesPage.getTotalPages());
+        model.addAttribute("totalProperties", propertiesPage.getTotalElements());  // Додано загальну кількість
 
         model.addAttribute("location", location);
         model.addAttribute("roomCount", roomCount);

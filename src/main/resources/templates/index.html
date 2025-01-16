@@ -15,8 +15,10 @@
     <div class="main-filters py-3">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-auto filter-button">
-                    <button class="btn btn-primary">Арендовать квартиру</button>
+                <div class="col-12">
+                    <h2 class="apartments-title">Аренда квартир</h2>
+                    <p class="apartments-subtitle" th:with="word=${T(com.rentalapp.Utils.TextUtils).getPluralForm(totalProperties, 'предложение', 'предложения', 'предложений')}"
+                       th:text="${totalProperties + ' ' + word}">предложений</p>
                 </div>
                 <div class="col-auto d-md-none">
                     <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#filtersMenu" aria-expanded="false" aria-controls="filtersMenu">
