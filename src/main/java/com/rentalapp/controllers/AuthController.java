@@ -65,7 +65,7 @@ public class AuthController {
             registrationService.register(person);
             redirectAttributes.addFlashAttribute("successMessage",
                     "Реєстрація успішна! Будь ласка, увійдіть в систему.");
-            return "redirect:/auth/login";
+            return "redirect:/home";
         } catch (UserAlreadyExistsException e) {
             bindingResult.rejectValue("email", "error.user",
                     "Користувач з такою електронною поштою вже існує");
